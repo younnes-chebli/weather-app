@@ -25,14 +25,23 @@ const getCoordinates = async (cityName) => {
     }
 };
 
-/*
-<h2>Bruxelles</h2>
-<div class="row">
-    <p>jour</p>
-    <p>Pluie</p>
-    <p>min - max</p>
-</div>
-*/
+const setWeatherFont = (weather, weatherDisplay) => {
+    const font = document.createElement("i");
+    switch(weather) {
+        case "Rain":
+            font.classList.add("fa-solid", "fa-cloud-showers-heavy");
+            weatherDisplay.prepend(font);
+            break;
+        case "Clouds":
+            font.classList.add("fa-solid", "fa-cloud");
+            weatherDisplay.prepend(font);
+            break;
+        case "Clear":
+            font.classList.add("fa-solid", "fa-sun");
+            weatherDisplay.prepend(font);
+            break;
+    }
+};
 
 const displayWeather = (weatherInfos) => {
     main.style.visibility = "visible";
@@ -40,7 +49,6 @@ const displayWeather = (weatherInfos) => {
     const nameDisplay = document.createElement("h2");
     nameDisplay.innerHTML = name;
     main.append(nameDisplay);
-
     
     for(let i = 0; i < weatherInfos.list.length; i += 8) {
         const rowDisplay = document.createElement("div");
@@ -54,12 +62,19 @@ const displayWeather = (weatherInfos) => {
         const weatherDisplay = document.createElement("p");
         const weather = weatherInfos.list[i].weather[0].main;
         weatherDisplay.innerHTML = weather;
+        setWeatherFont(weatherInfos.list[i].weather[0].main, weatherDisplay);
 
         const temperaturesDisplay = document.createElement("p");
+        const minDisplay = document.createElement("span");
+        minDisplay.classList.add("min");
+        const maxDisplay = document.createElement("span");
+        maxDisplay.classList.add("max");
         const tempMin = weatherInfos.list[i].main.temp_min;
         const tempMax = weatherInfos.list[i].main.temp_max;
-        temperaturesDisplay.innerHTML = `${tempMin}°C - ${tempMax}°C`;
-
+        minDisplay.innerHTML = `${tempMin}°C`;
+        maxDisplay.innerHTML = `${tempMax}°C`;
+        temperaturesDisplay.append(minDisplay, " - ", maxDisplay);
+        
         rowDisplay.append(dayDisplay, weatherDisplay, temperaturesDisplay);
         main.append(rowDisplay);
     }

@@ -5,14 +5,14 @@
     font-family: 'Open Sans', sans-serif;
     background-color: steelblue;
     color: black;
-    outline: 1px solid red;
+    /* outline: 1px solid red; */
 }
 
 body {
     margin: 0;
     min-height: 100vh;
     max-width: 100vw;
-    padding: 3rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,4 +21,63 @@ body {
 footer {
     margin-top: auto;
     border-top: 3px solid black;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    color: black;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    background-color: white;
+}
+
+button {
+    border: none;
+    background-color: #303030;
+    color: white;
+}
+
+main, main * {
+    background-color: skyblue;
+}
+
+main {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 30%;
+    visibility: hidden;
+}
+
+.row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.min {
+    font-weight: bold;
+    color: blue;
+}
+
+.max {
+    font-weight: bold;
+    color: darkred;
+}
+
+i {
+    padding-right: 0.3rem;
+}
+
+#error {
+    font-weight: bold;
+    color: darkred;
 }

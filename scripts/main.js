@@ -1,8 +1,6 @@
 const APIKey = "5eb3261492e9af00907c365814ccbbab";
-const form = document.getElementById
-const cityInput = document.getElementById("city-input");
+const form = document.getElementById("city-name-form");
 const main = document.querySelector("main");
-const letsGoButton = document.getElementById("letsGo-button");
 const error = document.getElementById("error");
 let now = new Date();
 const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
@@ -88,11 +86,11 @@ const resetDisplay = () => {
 
 const getWeather = async (e) => {
     e.preventDefault();
-    const cityName = cityInput.value;
+    const formData = Object.fromEntries(new FormData(e.target));
     resetDisplay();
-    if(cityName != "") {
+    if(formData.cityName != "") {
         try {
-            const cityInfos = await getCoordinates(cityName);
+            const cityInfos = await getCoordinates(formData.cityName);
             const lat = cityInfos.lat;
             const lon = cityInfos.lon;
             const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`);
@@ -106,4 +104,4 @@ const getWeather = async (e) => {
     }
 };
 
-letsGoButton.addEventListener("click", getWeather);
+form.addEventListener("submit", getWeather);

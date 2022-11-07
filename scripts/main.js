@@ -116,7 +116,19 @@ const getWeather = async (e) => {
             displayWeather(weatherInfos);      
         } catch(err) {
             console.log(err);
-        }    
+        }
+        if(formData.compareCityName != "") {
+            try {
+                const cityInfos = await getCoordinates(formData.compareCityName);
+                const lat = cityInfos.lat;
+                const lon = cityInfos.lon;
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OWKey}&units=metric`);
+                const weatherInfos = await response.json();
+                displayWeather(weatherInfos);      
+            } catch(err) {
+                console.log(err);
+            }    
+        }
     } else {
         resetDisplay();
     }

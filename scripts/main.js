@@ -1,4 +1,5 @@
-const APIKey = "5eb3261492e9af00907c365814ccbbab";
+const OWKey = "5eb3261492e9af00907c365814ccbbab";
+const UKey = "bt4EnCAoUQgSuEYeuFY0-YZoBlt-iFfIqPok0JfhZ14";
 const form = document.getElementById("city-name-form");
 const main = document.querySelector("main");
 const error = document.getElementById("error");
@@ -11,7 +12,7 @@ const displayError = () => {
 
 const getCoordinates = async (cityName) => {
     try {
-        const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${APIKey}`);
+        const response = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=5&appid=${OWKey}`);
         const cityInfos = await response.json();
         if(cityInfos.length != 0) {
             return cityInfos[0];
@@ -20,6 +21,20 @@ const getCoordinates = async (cityName) => {
         }
     } catch(err) {
         console.log(err);
+    }
+};
+
+const setImage = async (name) => {
+    try {
+        const response = await fetch(`https://api.unsplash.com/search/photos?query=${name}&client_id=${UKey}`);
+        const responseJSON = await response.json();
+        imageURL = responseJSON.results[5].urls.regular;
+        console.log(imageURL);
+        document.body.style.backgroundImage = `url(${imageURL})`;
+        document.body.style.backgroundRepeat = "no-repeat";
+        document.body.style.backgroundSize = "cover";
+    } catch(error) {
+        console.log(error);
     }
 };
 
@@ -76,12 +91,15 @@ const displayWeather = (weatherInfos) => {
         rowDisplay.append(dayDisplay, weatherDisplay, temperaturesDisplay);
         main.append(rowDisplay);
     }
+
+    setImage(name);
 };
 
 const resetDisplay = () => {
     error.innerHTML = "";
     main.innerHTML = "";
     main.style.visibility = "hidden";
+    document.body.style.backgroundImage = "none";
 };
 
 const getWeather = async (e) => {
@@ -93,9 +111,9 @@ const getWeather = async (e) => {
             const cityInfos = await getCoordinates(formData.cityName);
             const lat = cityInfos.lat;
             const lon = cityInfos.lon;
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`);
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${OWKey}&units=metric`);
             const weatherInfos = await response.json();
-            displayWeather(weatherInfos);            
+            displayWeather(weatherInfos);      
         } catch(err) {
             console.log(err);
         }    

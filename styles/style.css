@@ -63,6 +63,20 @@ main {
     justify-content: space-around;
 }
 
+.min {
+    font-weight: bold;
+    color: blue;
+}
+
+.max {
+    font-weight: bold;
+    color: darkred;
+}
+
+i {
+    padding-right: 0.3rem;
+}
+
 #error {
     font-weight: bold;
     color: darkred;

@@ -5,6 +5,7 @@ const main = document.querySelector("main");
 const error = document.getElementById("error");
 let now = new Date();
 const daysOfWeek = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+const charts = document.getElementById("charts");
 
 const displayError = () => {
     error.innerHTML = "Please Enter A Valid City!";
@@ -24,12 +25,35 @@ const getCoordinates = async (cityName) => {
     }
 };
 
+const displayChart = (days, temperatures) => {    
+      const data = {
+        labels: days,
+        datasets: [{
+          label: 'Temperatures over time',
+          backgroundColor: 'rgb(255, 99, 132)',
+          borderColor: 'rgb(255, 99, 132)',
+          data: temperatures,
+        }]
+      };
+    
+      const config = {
+        type: 'line',
+        data: data,
+        options: {}
+      };
+
+      const canvas = document.createElement("canvas");
+
+      const chart = new Chart(canvas, config);
+
+      main.append(canvas);
+};
+
 const setImage = async (name) => {
     try {
         const response = await fetch(`https://api.unsplash.com/search/photos?query=${name}&client_id=${UKey}`);
         const responseJSON = await response.json();
         imageURL = responseJSON.results[5].urls.regular;
-        console.log(imageURL);
         document.body.style.backgroundImage = `url(${imageURL})`;
         document.body.style.backgroundRepeat = "no-repeat";
         document.body.style.backgroundSize = "cover";
@@ -62,6 +86,8 @@ const displayWeather = (weatherInfos) => {
     const nameDisplay = document.createElement("h2");
     nameDisplay.innerHTML = name;
     main.append(nameDisplay);
+    const days = [];
+    const temperatures = [];
     
     for(let i = 0; i < weatherInfos.list.length; i += 8) {
         const rowDisplay = document.createElement("div");
@@ -71,6 +97,7 @@ const displayWeather = (weatherInfos) => {
         const date = new Date(weatherInfos.list[i].dt_txt);
         const day = daysOfWeek[date.getDay()];
         dayDisplay.innerHTML = day;
+        days.push(day);
 
         const weatherDisplay = document.createElement("p");
         const weather = weatherInfos.list[i].weather[0].main;
@@ -87,12 +114,14 @@ const displayWeather = (weatherInfos) => {
         minDisplay.innerHTML = `${tempMin}°C`;
         maxDisplay.innerHTML = `${tempMax}°C`;
         temperaturesDisplay.append(minDisplay, " - ", maxDisplay);
+        temperatures.push(weatherInfos.list[i].main.temp);
         
         rowDisplay.append(dayDisplay, weatherDisplay, temperaturesDisplay);
         main.append(rowDisplay);
     }
 
     setImage(name);
+    displayChart(days, temperatures);
 };
 
 const resetDisplay = () => {
